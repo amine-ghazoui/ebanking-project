@@ -1,8 +1,16 @@
 package org.example.ebankingbackend.entities;
 
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.*;
 
+@Entity
+/*
+quand je crée un CurrentAccount, la dans la clone type, il est affect comme valeur
+CurrentAccount (il doit avoir maximum 4 caractère ex : CA et l'autre CC )
+ */
+@DiscriminatorValue("CA")
 @Data
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
 public class CurrentAccount extends BankAccount{
