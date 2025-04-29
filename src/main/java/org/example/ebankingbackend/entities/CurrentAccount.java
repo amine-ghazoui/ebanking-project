@@ -12,7 +12,7 @@ CurrentAccount (il doit avoir maximum 4 caractère ex : CA et l'autre CC )
  */
 @DiscriminatorValue("CA")
 @Data
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class CurrentAccount extends BankAccount{
 
     private double overDraft;

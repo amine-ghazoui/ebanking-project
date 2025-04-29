@@ -1,9 +1,6 @@
 package org.example.ebankingbackend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.example.ebankingbackend.enums.OperationType;
 
@@ -11,13 +8,14 @@ import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class AccountOperation {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date operationDate;
     private double amount;
+    @Enumerated(EnumType.STRING)
     private OperationType type;
     @ManyToOne
     private BankAccount bankAccount;

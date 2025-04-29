@@ -16,13 +16,15 @@ dit a JPA tien toutes les classes qui héritent de cette classe, tu vas me les s
 // spécifier la colone ajouter a la table
 @DiscriminatorColumn(name = "TYPE", length = 4, discriminatorType = DiscriminatorType.STRING)
 @Data
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class BankAccount {
 
     @Id
     private String id;
     private double balance;
     private Date createdAt;
+    // pour traduire la valeur de status en string
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER)

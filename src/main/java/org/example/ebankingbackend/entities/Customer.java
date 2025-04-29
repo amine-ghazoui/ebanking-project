@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class Customer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,7 @@ public class Customer {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "ccustomer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<BankAccount> bankAccounts;
 
 }
