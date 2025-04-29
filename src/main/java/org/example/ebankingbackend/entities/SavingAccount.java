@@ -6,7 +6,8 @@ import jakarta.persistence.Entity;
 import lombok.*;
 
 @Entity
-@DiscriminatorValue("SA")
+// regarder CurrentAccount pour comprendre
+//@DiscriminatorValue("SA")
 @Data
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class SavingAccount extends BankAccount{

@@ -8,9 +8,9 @@ import lombok.*;
 @Entity
 /*
 quand je crée un CurrentAccount, la dans la clone type, il est affect comme valeur
-CurrentAccount (il doit avoir maximum 4 caractère ex : CA et l'autre CC )
+CurrentAccount (il doit avoir maximum 4 caractère ex : CA et l'autre CC ) (dans le cas Single table)
  */
-@DiscriminatorValue("CA")
+//@DiscriminatorValue("CA")
 @Data
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class CurrentAccount extends BankAccount{

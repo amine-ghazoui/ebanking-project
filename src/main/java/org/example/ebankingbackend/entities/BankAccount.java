@@ -12,11 +12,12 @@ import java.util.List;
 /*
 dit a JPA tien toutes les classes qui héritent de cette classe, tu vas me les stocker dans une seule table
  */
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-// spécifier la colone ajouter a la table
-@DiscriminatorColumn(name = "TYPE", length = 4, discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+// spécifier la colone ajouter a la table (dans le cas Single table)
+//@DiscriminatorColumn(name = "TYPE", length = 4, discriminatorType = DiscriminatorType.STRING)
 @Data
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
+// on ajoute abstract dans le cas TABLE_PER_CLASS
 public class BankAccount {
 
     @Id
