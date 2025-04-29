@@ -7,7 +7,7 @@ import lombok.*;
 
 @Entity
 // regarder CurrentAccount pour comprendre
-//@DiscriminatorValue("SA")
+@DiscriminatorValue("SA")
 @Data
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class SavingAccount extends BankAccount{

@@ -1,9 +1,6 @@
 package org.example.ebankingbackend;
 
-import org.example.ebankingbackend.entities.AccountOperation;
-import org.example.ebankingbackend.entities.CurrentAccount;
-import org.example.ebankingbackend.entities.Customer;
-import org.example.ebankingbackend.entities.SavingAccount;
+import org.example.ebankingbackend.entities.*;
 import org.example.ebankingbackend.enums.AccountStatus;
 import org.example.ebankingbackend.enums.OperationType;
 import org.example.ebankingbackend.repositories.AccountOperationRepository;
@@ -12,6 +9,7 @@ import org.example.ebankingbackend.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
@@ -26,7 +24,7 @@ public class EbankingBackendApplication {
         SpringApplication.run(EbankingBackendApplication.class, args);
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner start(CustomerRepository customerRepository,
                             BankAccountRepository bankAccountRepository,
                             AccountOperationRepository accountOperationRepository) {
@@ -67,6 +65,39 @@ public class EbankingBackendApplication {
                     accountOperation.setBankAccount(bankAccount);
                     accountOperationRepository.save(accountOperation);
                 }
+            });
+
+        };
+    }
+
+    // la partie consultation
+    @Bean
+    CommandLineRunner commandLineRunner(CustomerRepository customerRepository,
+                                        BankAccountRepository bankAccountRepository,
+                                        AccountOperationRepository accountOperationRepository) {
+
+        return args -> {
+
+            BankAccount bankAccount =
+                    bankAccountRepository.findById("00035a3e-b2a9-490e-8e26-903766b73bf6").orElse(null);
+
+            System.out.println("***********************************************");
+            System.out.println(bankAccount.getId());
+            System.out.println(bankAccount.getBalance());
+            System.out.println(bankAccount.getStatus());
+            System.out.println(bankAccount.getCreatedAt());
+            System.out.println(bankAccount.getCustomer().getName());
+            // pour afficher le nom de la classe de le compte !!
+            System.out.println(bankAccount.getClass().getSimpleName());
+            if (bankAccount instanceof CurrentAccount){
+                System.out.println("Over Draft =>"+((CurrentAccount)bankAccount).getOverDraft());
+            }
+            else if (bankAccount instanceof SavingAccount){
+                System.out.println("Rate =>"+((SavingAccount)bankAccount).getInterestRate());
+            }
+            bankAccount.getAccountOperations().forEach(op -> {
+                System.out.println("=================================================");
+                System.out.println(op.getType()+"\t"+op.getAmount()+"\t"+op.getOperationDate());
             });
         };
     }
