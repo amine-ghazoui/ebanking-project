@@ -2,10 +2,9 @@ package org.example.ebankingbackend.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.ebankingbackend.entities.BankAccount;
-import org.example.ebankingbackend.entities.CurrentAccount;
-import org.example.ebankingbackend.entities.Customer;
-import org.example.ebankingbackend.entities.SavingAccount;
+import org.example.ebankingbackend.entities.*;
+import org.example.ebankingbackend.enums.OperationType;
+import org.example.ebankingbackend.exceptions.BalanceNotSufficientException;
 import org.example.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.example.ebankingbackend.exceptions.CustomerNotFoundException;
 import org.example.ebankingbackend.repositories.AccountOperationRepository;
@@ -32,6 +31,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     BankAccountRepository bankAccountRepository;
     AccountOperationRepository accountOperationRepository;
 
+    //***************************************************************************************
+
+    // Enregistre un nouveau client dans la base de données.
     @Override
     public Customer saveCustomer(Customer customer) {
         log.info("Savin new Customer");
@@ -39,6 +41,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         return savedCustomer;
     }
 
+    //***************************************************************************************
+
+    //  Crée et enregistre un compte courant (Compte pour les dépenses quotidiennes) pour un client donné.
     @Override
     public CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException {
 
@@ -56,6 +61,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         return savedAccount;
     }
 
+    //***************************************************************************************
+
+    // Crée et enregistre un compte épargne (Compte pour économiser de l’argent) pour un client donné.
     @Override
     public SavingAccount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
@@ -72,12 +80,16 @@ public class BankAccountServiceImpl implements BankAccountService {
         return savedAccount;
     }
 
+    //***************************************************************************************
+
+    // Récupère la liste de tous les clients enregistrés.
     @Override
     public List<Customer> listCustomers() {
 
         return customerRepository.findAll();
     }
 
+    // Recherche un compte bancaire par son identifiant.
     @Override
     public BankAccount getBankAccount(String accountId)throws BankAccountNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findById(accountId).
@@ -86,18 +98,58 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccount;
     }
 
-    @Override
-    public void debit(String accountId, double amount, String description) {
+    //***************************************************************************************
 
+    //  Effectue une opération de débit (Sortie d’argent du compte) sur un compte bancaire donné.
+    @Override
+    public void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        BankAccount bankAccount = getBankAccount(accountId);
+        if (bankAccount.getBalance() < amount) {
+            throw new BalanceNotSufficientException("Balance not Sufficient");
+        }
+        AccountOperation accountOperation = new AccountOperation();
+        accountOperation.setType(OperationType.DEBIT);
+        accountOperation.setAmount(amount);
+        accountOperation.setDescription(description);
+        accountOperation.setOperationDate(new Date());
+        accountOperation.setBankAccount(bankAccount);
+        accountOperationRepository.save(accountOperation);
+        bankAccount.setBalance(bankAccount.getBalance() - amount);
+        bankAccountRepository.save(bankAccount);
     }
 
-    @Override
-    public void credit(String accountId, double amount, String description) {
+    //***************************************************************************************
 
+    // Effectue une opération de crédit (Entrée d’argent dans le compte) sur un compte bancaire donné.
+    @Override
+    public void credit(String accountId, double amount, String description) throws BankAccountNotFoundException {
+        BankAccount bankAccount = getBankAccount(accountId);
+
+        AccountOperation accountOperation = new AccountOperation();
+        accountOperation.setType(OperationType.CREDIT);
+        accountOperation.setAmount(amount);
+        accountOperation.setDescription(description);
+        accountOperation.setOperationDate(new Date());
+        accountOperation.setBankAccount(bankAccount);
+        accountOperationRepository.save(accountOperation);
+        bankAccount.setBalance(bankAccount.getBalance() + amount);
+        bankAccountRepository.save(bankAccount);
     }
 
-    @Override
-    public void transfert(String accountIdSource, String accountIdDestination, double amount) {
+    //***************************************************************************************
 
+    // Effectue une opération de crédit sur un compte bancaire donné.
+    @Override
+    public void transfert(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        debit(accountIdSource, amount, "Transfer to "+accountIdDestination);
+        credit(accountIdDestination, amount, "Transfer from "+accountIdSource);
     }
+
+    //***************************************************************************************
+
+    @Override
+    public List<BankAccount> bankAccountList(){
+        return bankAccountRepository.findAll();
+    }
+
 }

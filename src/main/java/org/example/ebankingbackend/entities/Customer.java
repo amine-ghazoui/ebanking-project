@@ -1,5 +1,6 @@
 package org.example.ebankingbackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,8 @@ public class Customer {
     private String email;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    //c-a-d ignorer bankAccount dans l'affichage
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<BankAccount> bankAccounts;
 
 }
