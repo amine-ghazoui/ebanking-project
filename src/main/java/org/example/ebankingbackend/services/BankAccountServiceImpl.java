@@ -16,7 +16,6 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -40,10 +39,11 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     // Enregistre un nouveau client dans la base de données.
     @Override
-    public Customer saveCustomer(Customer customer) {
-        log.info("Savin new Customer");
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        log.info("Saving new Customer");
+        Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
         Customer savedCustomer = customerRepository.save(customer);
-        return savedCustomer;
+        return dtoMapper.fromCustomer(savedCustomer);
     }
 
     //***************************************************************************************
@@ -166,6 +166,31 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccount> bankAccountList(){
         return bankAccountRepository.findAll();
+    }
+
+    @Override
+    public CustomerDTO getCustomer(Long accountId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(accountId)
+                .orElseThrow(()-> new CustomerNotFoundException("Customer not found"));
+        return dtoMapper.fromCustomer(customer);
+    }
+
+    //***************************************************************************************
+
+    // Enregistre un nouveau client dans la base de données.
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        log.info("Saving new Customer");
+        Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return dtoMapper.fromCustomer(savedCustomer);
+    }
+
+    //***************************************************************************************
+
+    @Override
+    public void deleteCustomer(Long customerId){
+        customerRepository.deleteById(customerId);
     }
 
 }

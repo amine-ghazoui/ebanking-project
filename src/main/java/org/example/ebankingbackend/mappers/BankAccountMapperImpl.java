@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class BankAccountMapperImpl {
 
     /*
-    il existe un framework qui faire ca, nous on crée seulement l'interface et déclarer uniquement la signature de la methode
+    il existe un framework qui faire ca, nous on crée seulement l'interface et déclarer uniquement
+    la signature de la methode
     (parce que ça c'est un code technique). Le framework le plus util, il y a MapStruct
-
      */
     public CustomerDTO fromCustomer(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
@@ -28,6 +28,6 @@ public class BankAccountMapperImpl {
 
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
-        return null;
+        return customer;
     }
 }
