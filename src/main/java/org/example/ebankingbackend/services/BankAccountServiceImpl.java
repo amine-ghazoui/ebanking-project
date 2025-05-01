@@ -2,11 +2,13 @@ package org.example.ebankingbackend.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.ebankingbackend.dtos.CustomerDTO;
 import org.example.ebankingbackend.entities.*;
 import org.example.ebankingbackend.enums.OperationType;
 import org.example.ebankingbackend.exceptions.BalanceNotSufficientException;
 import org.example.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.example.ebankingbackend.exceptions.CustomerNotFoundException;
+import org.example.ebankingbackend.mappers.BankAccountMapperImpl;
 import org.example.ebankingbackend.repositories.AccountOperationRepository;
 import org.example.ebankingbackend.repositories.BankAccountRepository;
 import org.example.ebankingbackend.repositories.CustomerRepository;
@@ -14,9 +16,11 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,6 +34,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     CustomerRepository customerRepository;
     BankAccountRepository bankAccountRepository;
     AccountOperationRepository accountOperationRepository;
+    private BankAccountMapperImpl dtoMapper;
 
     //***************************************************************************************
 
@@ -84,9 +89,20 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     // Récupère la liste de tous les clients enregistrés.
     @Override
-    public List<Customer> listCustomers() {
+    public List<CustomerDTO> listCustomers() {
 
-        return customerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO> customerDTOS =  customers.stream().map(customer -> dtoMapper.fromCustomer(customer)).collect(Collectors.toList());
+
+        /*
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        for (Customer customer : customers) {
+            CustomerDTO customerDTO = dtoMapper.fromCustomer(customer);
+            customerDTOS.add(customerDTO);
+        }
+         */
+
+        return customerDTOS;
     }
 
     // Recherche un compte bancaire par son identifiant.

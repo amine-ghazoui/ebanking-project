@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// c'est un web service
 @RestController
 @AllArgsConstructor
 public class CustomerRestController {
