@@ -1,9 +1,11 @@
 package org.example.ebankingbackend.mappers;
 
 
+import org.example.ebankingbackend.dtos.AccountOperationDTO;
 import org.example.ebankingbackend.dtos.CurrentBankAccountDTO;
 import org.example.ebankingbackend.dtos.CustomerDTO;
 import org.example.ebankingbackend.dtos.SavingBankAccountDTO;
+import org.example.ebankingbackend.entities.AccountOperation;
 import org.example.ebankingbackend.entities.CurrentAccount;
 import org.example.ebankingbackend.entities.Customer;
 import org.example.ebankingbackend.entities.SavingAccount;
@@ -39,6 +41,8 @@ public class BankAccountMapperImpl {
         SavingBankAccountDTO savingBankAccountDTO = new SavingBankAccountDTO();
         BeanUtils.copyProperties(savingAccount, savingBankAccountDTO);
         savingBankAccountDTO.setCustomerDTO(fromCustomer(savingAccount.getCustomer()));
+        // pour récupérer le type du compte
+        savingBankAccountDTO.setType(savingAccount.getClass().getSimpleName());
         return savingBankAccountDTO;
     }
 
@@ -54,6 +58,7 @@ public class BankAccountMapperImpl {
         CurrentBankAccountDTO currentBankAccountDTO = new CurrentBankAccountDTO();
         BeanUtils.copyProperties(currentAccount, currentBankAccountDTO);
         currentBankAccountDTO.setCustomerDTO(fromCustomer(currentAccount.getCustomer()));
+        currentBankAccountDTO.setType(currentAccount .getClass().getSimpleName());
         return currentBankAccountDTO;
     }
 
@@ -63,5 +68,11 @@ public class BankAccountMapperImpl {
         BeanUtils.copyProperties(currentBankAccountDTO, currentAccount);
         currentAccount.setCustomer(fromCustomerDTO(currentBankAccountDTO.getCustomerDTO()));
         return currentAccount;
+    }
+
+    public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation){
+        AccountOperationDTO accountOperationDTO = new AccountOperationDTO();
+        BeanUtils.copyProperties(accountOperation, accountOperationDTO);
+        return accountOperationDTO;
     }
 }

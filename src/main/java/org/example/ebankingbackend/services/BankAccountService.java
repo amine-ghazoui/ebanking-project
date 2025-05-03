@@ -2,10 +2,7 @@ package org.example.ebankingbackend.services;
 
 
 import jakarta.transaction.Transactional;
-import org.example.ebankingbackend.dtos.BankAccountDTO;
-import org.example.ebankingbackend.dtos.CurrentBankAccountDTO;
-import org.example.ebankingbackend.dtos.CustomerDTO;
-import org.example.ebankingbackend.dtos.SavingBankAccountDTO;
+import org.example.ebankingbackend.dtos.*;
 import org.example.ebankingbackend.entities.BankAccount;
 import org.example.ebankingbackend.entities.CurrentAccount;
 import org.example.ebankingbackend.entities.Customer;
@@ -35,4 +32,8 @@ public interface BankAccountService {
     CustomerDTO updateCustomer(CustomerDTO customerDTO);
 
     void deleteCustomer(Long customerId);
+
+    List<AccountOperationDTO> accountHistory(String accountId);
+
+    AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 }
