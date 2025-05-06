@@ -1,6 +1,7 @@
 package org.example.ebankingbackend.web;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.ebankingbackend.dtos.CustomerDTO;
 import org.example.ebankingbackend.entities.Customer;
 import org.example.ebankingbackend.exceptions.CustomerNotFoundException;
@@ -12,6 +13,9 @@ import java.util.List;
 // c'est un web service
 @RestController
 @AllArgsConstructor
+@Slf4j
+// Permet de gérer les requêtes provenant de domaines différents (CORS - Cross-Origin Resource Sharing)
+@CrossOrigin("*") // autorisé tout les domaines
 public class CustomerRestController {
 
     private BankAccountService bankAccountService;
@@ -38,10 +42,14 @@ public class CustomerRestController {
     }
 
     @DeleteMapping("/customers/{id}")
-    public void deleteCustomer(@PathVariable Long id) {
+    public void deleteCustomer(@PathVariable Long id){
         bankAccountService.deleteCustomer(id);
     }
 
+    @GetMapping("/customers/search")
+    public List<CustomerDTO> searchCustomer(@RequestParam(name = "keyword", defaultValue = "") String keyword) {
+        return bankAccountService.searchCustomer("%"+keyword+"%");
+    }
 }
 
 

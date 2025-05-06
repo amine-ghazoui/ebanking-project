@@ -28,7 +28,7 @@ public class BankAccount {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.LAZY)
     private List<AccountOperation>accountOperations;
 
     @ManyToOne

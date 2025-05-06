@@ -16,7 +16,7 @@ public class Customer {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer")
     //c-a-d ignorer bankAccount dans l'affichage
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<BankAccount> bankAccounts;
