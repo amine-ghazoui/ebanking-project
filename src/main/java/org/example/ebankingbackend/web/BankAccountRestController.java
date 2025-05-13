@@ -1,9 +1,8 @@
 package org.example.ebankingbackend.web;
 
 import lombok.AllArgsConstructor;
-import org.example.ebankingbackend.dtos.AccountHistoryDTO;
-import org.example.ebankingbackend.dtos.AccountOperationDTO;
-import org.example.ebankingbackend.dtos.BankAccountDTO;
+import org.example.ebankingbackend.dtos.*;
+import org.example.ebankingbackend.exceptions.BalanceNotSufficientException;
 import org.example.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.example.ebankingbackend.repositories.BankAccountRepository;
 import org.example.ebankingbackend.services.BankAccountService;
@@ -43,4 +42,30 @@ public class BankAccountRestController {
             @RequestParam(name = "size", defaultValue = "5") int size) throws BankAccountNotFoundException {
         return bankAccountService.getAccountHistory(accountId, page, size);
     }
+
+    @PostMapping("/accounts/debit")
+    public DebitDTO debit(@RequestBody DebitDTO debitDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.debit(debitDTO.getAccountId(), debitDTO.getAmount(), debitDTO.getDescription());
+        return debitDTO;
+    }
+
+    @PostMapping("/accounts/credit")
+    public CreditDTO credit(@RequestBody CreditDTO creditDTO) throws BankAccountNotFoundException{
+        this.bankAccountService.credit(creditDTO.getAccountId(), creditDTO.getAmount(), creditDTO.getDescription());
+        return creditDTO;
+    }
+
+    @PostMapping("/accounts/transfer")
+    public void transfer(@RequestBody TransferRequestDTO transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.transfert(
+                transferRequestDTO.getAccountSource(),
+                transferRequestDTO.getAccountDestination(),
+                transferRequestDTO.getAmount());
+    }
 }
+
+/*
+@RequestBody : permet de récupérer automatiquement les données envoyées par le client (en JSON) dans le corps de la requête, et de les convertir en objet Java (ici, un objet DebitDTO).
+@RequestParam : Utilisé pour récupérer des paramètres de la requête présents dans l’URL après le "?"
+@PathVariable : Utilisé pour extraire une valeur intégrée directement dans le chemin (path) de l’URL.
+ */
