@@ -18,6 +18,7 @@ public class AccountOperation {
     private String description;
     @Enumerated(EnumType.STRING)
     private OperationType type;
+
     @ManyToOne
     private BankAccount bankAccount;
 
