@@ -129,11 +129,11 @@ src/
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
             <version>3.4.5</version>
-        </dependency>-->
+        </dependency>
         <!-- Pour Spring Boot 3+ -->
         <dependency>
             <groupId>org.springdoc</groupId>
