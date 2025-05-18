@@ -1,27 +1,27 @@
 # 💳 Application E-Banking — Backend
 
-Une application Spring Boot pour la gestion des opérations bancaires, y compris la gestion des clients, des comptes bancaires, et des opérations de débit/crédit.
+A Spring Boot application for managing banking operations, including client management, bank accounts, and debit/credit transactions.
 
-## 📝 Présentation
+## Overview
 
-Ce backend fournit une API RESTful pour une application bancaire permettant :
-- La gestion des clients et de leurs comptes.
-- La gestion des opérations bancaires (crédit, débit).
-- L’authentification sécurisée avec JWT.
-- L’enregistrement de l’utilisateur ayant effectué chaque opération.
-- L’administration des comptes utilisateurs.
+This backend provides a RESTful API for a banking application with the following capabilities:
+- Client and account management.
+- Handling banking operations (credit and debit).
+- Secure authentication using JWT.
+- Recording the user who performed each operation.
+- Administration of user accounts.
 
-## 🎯 Fonctionnalités principales
+## Main Features
 
-- Création et gestion des clients.
-- Comptes courants avec découvert autorisé.
-- Comptes épargne avec taux d’intérêt.
-- Enregistrement des opérations (crédit, débit).
-- Historique des opérations par compte.
-- Sécurité avec Spring Security + JWT.
-- Documentation API avec Swagger/OpenAPI.
+- Create and manage clients.
+- Current accounts with authorized overdraft.
+- Savings accounts with interest rate.
+- Record banking operations (credit, debit).
+- Transaction history per account.
+- Secure access with Spring Security + JWT.
+- API documentation with Swagger/OpenAPI.
 
-## 🧱 Architecture du projet
+## Project Architecture
 
 ```text
 src/
@@ -38,7 +38,7 @@ src/
 │   └── TransferRequestDTO
 ├── entities/
 │   ├── Customer.java
-│   ├── BankAccount.java (abstraite)
+│   ├── BankAccount.java (abstract)
 │   ├── SavingAccount.java
 │   ├── CurrentAccount.java
 │   └── AccountOperation.java
@@ -50,7 +50,7 @@ src/
 │   ├── BankAccountNotFoundException
 │   └── CustomerNotFoundException
 ├── mappers/
-│   ├── BankAccountMapperImpl
+│   └── BankAccountMapperImpl
 ├── repositories/
 │   ├── CustomerRepository.java
 │   ├── BankAccountRepository.java
@@ -61,38 +61,44 @@ src/
 ├── services/
 │   ├── BankAccountService
 │   └── BankAccountServiceImpl
-│
 ├── web/
 │   ├── CustomerRestController.java
-│   ├── BankAccountRestController.java
-└──
+│   └── BankAccountRestController.java
+
 ```
 
+## Entity Relationships
 
-## 🧩 Relations entre les entités
+- **One client** can have **multiple bank accounts** (OneToMany).
+- **One bank account** can have **multiple operations** (OneToMany).
+- `BankAccount` is an abstract class:
+  - `CurrentAccount` adds the `overDraft` field.
+  - `SavingAccount` adds the `interestRate` field.
+  
 
-- **Un client** possède **plusieurs comptes bancaires** (OneToMany).
-- **Un compte bancaire** a **plusieurs opérations** (OneToMany).
-- **BankAccount** est une classe abstraite :
-  - `CurrentAccount` : ajoute un champ `overDraft`.
-  - `SavingAccount` : ajoute un champ `interestRate`.
+## Class Diagram
 
-## 🛢️ Schéma de la base de données (H2)
+Below is the class diagram representing the main entities of the application:
 
-- **Customer** : id, nom, email
-- **BankAccount** : id, balance, date de création, status, customer_id
-- **CurrentAccount** : overDraft
-- **SavingAccount** : interestRate
-- **AccountOperation** : id, date, type, montant, description, bankAccount_id, userId
+![image](https://github.com/user-attachments/assets/f687256a-dd7a-48fb-8979-de9cbca5aa12)
 
-## 🔐 Sécurité
 
-- Authentification via Spring Security avec JWT
-- Utilisateurs avec rôles : ADMIN, USER
-- Système de gestion de comptes et mot de passe
-- Changement de mot de passe par l'utilisateur
+## Database Schema (H2)
 
-## 📦 Dépendances Maven importantes
+- **Customer**: id, name, email  
+- **BankAccount**: id, balance, creationDate, status, customer_id  
+- **CurrentAccount**: overDraft  
+- **SavingAccount**: interestRate  
+- **AccountOperation**: id, date, type, amount, description, bankAccount_id, userId
+
+## Security
+
+- Authentication via Spring Security and JWT.
+- User roles: `ADMIN`, `USER`.
+- Account and password management system.
+- Users can change their password.
+
+## Important Maven Dependencies
 
 ```xml
 <dependencies>
@@ -142,3 +148,7 @@ src/
         </dependency>
     </dependencies>
 ```
+
+## Frontend Link
+
+The frontend for this application is available here:  https://github.com/amine-ghazoui/ebanking-front
