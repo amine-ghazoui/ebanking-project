@@ -30,9 +30,12 @@ src/
 │   ├── AccountHistoryDTO
 │   ├── AccountOperationDTO
 │   └── BankAccountDTO
+│   ├── CreditDTO
 │   ├── CurrentBankAccountDTO
 │   ├── CustomerDTO
-│   └── SavingBankAccountDTO
+│   ├── DebitDTO
+│   ├── SavingBankAccountDTO
+│   └── TransferRequestDTO
 ├── entities/
 │   ├── Customer.java
 │   ├── BankAccount.java (abstraite)
@@ -52,6 +55,9 @@ src/
 │   ├── CustomerRepository.java
 │   ├── BankAccountRepository.java
 │   └── AccountOperationRepository.java
+├── security/
+│   ├── SecurityConfig
+│   └── SecurityController
 ├── services/
 │   ├── BankAccountService
 │   └── BankAccountServiceImpl
